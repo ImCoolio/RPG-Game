@@ -13,10 +13,10 @@ namespace RPG_Game
     {
         static void Main(String[] args)
         {
-            Title = "The RPG";
+            Title = "The Graceful Legend RPG";
             ForegroundColor = ConsoleColor.Yellow;
-            WindowHeight = 30;
-            WindowWidth = 180;
+            WindowHeight = 40;
+            WindowWidth = 120;
             int choice = 0;
             Boolean closeGame = false;
 
@@ -67,15 +67,17 @@ namespace RPG_Game
                             while (true)
                             {
                                 int[] currentLocation = player.getLocation();
-                                WriteLine("You are currently at (" + currentLocation[0] + ", " + currentLocation[1] + ").\nChoose your next option:");
+                                Write("You are currently at (" + currentLocation[0] + ", " + currentLocation[1] + "). ");
                                 player.getLocationType();
 
+                                Write("\nChoose your next option: ");
                                 String decision = ReadLine(); decision = decision.ToLower();
                                 if (decision == "w" || decision == "s" || decision == "a" || decision == "d")
                                     player.move(decision);
                                 if (decision == "z") {
                                     Clear();
                                     WriteLine("Thanks for playing The Graceful Legend RPG.");
+                                    Thread.Sleep(1000);
                                     closeGame = true;
                                     break;
                                 }
