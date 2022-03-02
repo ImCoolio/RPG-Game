@@ -120,24 +120,28 @@ namespace RPG_Game
                             break;
                         case "1, info":
                             Clear();
-                            WriteLine("The Warrior class is a primarily melee build, with very little use of magic moves. It has a high base strength and health stat, with low speed and magic.\n");
+                            WriteLine("The Warrior class is a primarily melee build, with very little use of magic moves. It has a high base strength and health stat, with low speed and magic.");
                             break;
                         case "2, info":
                             Clear();
-                            WriteLine("The Mage class is a primarily magic build, with little usage of melee attacks. It has a high base magic with mediocre speed. It has low strength and health.\n");
+                            WriteLine("The Mage class is a primarily magic build, with little usage of melee attacks. It has a high base magic with mediocre speed. It has low strength and health.");
                             break;
                         case "3, info":
                             Clear();
-                            WriteLine("The Rogue class is a primarily melee build, with a balanced usage of melee and magic attacks. It has a high base speed with mediocre health. It has low base strength and magic stats.\n");
+                            WriteLine("The Rogue class is a primarily melee build, with a balanced usage of melee and magic attacks. It has a high base speed with mediocre health. It has low base strength and magic stats.");
                             break;
                         default:
                             throw new Exception();
                     }
-                    var nameDecision = CreateQuestionBox("Are you sure you want to be a " + classSelection + "?", "Class Verification");
-                    if (nameDecision == DialogResult.Yes)
+
+                    if (choice == "1" || choice == "2" || choice == "3")
                     {
-                        Clear();
-                        break;
+                        var nameDecision = CreateQuestionBox("Are you sure you want to be a " + classSelection + "?", "Class Verification");
+                        if (nameDecision == DialogResult.Yes)
+                        {
+                            Clear();
+                            break;
+                        }
                     }
                 }
                 catch (Exception)
