@@ -223,10 +223,16 @@ namespace RPG_Game
 
         }
 
-        override
-        public String ToString()
+        public string GetStats()
         {
-            return "Player [name= " + name + ", level= " + level + ", xp= " + xp + ", gold=" + gold + ", playerClass= " + playerClass + ", playerWeapon= " + playerWeapon.ToString() + ", stats: HP " + stats[0] + ", STR " + stats[1] + ", Magic " + stats[2] + ", Max MP " + stats[3] + "]";
+           WriteLine("\n" + name + "'s information");
+
+           return "name= " + name + ", level= " + level + ", xp= " + xp + ", gold=" + gold + ", playerClass= " + playerClass + ", currentWeapon= " + playerWeapon.ToString() + ", stats: HP " + stats[0] + ", STR " + stats[1] + ", Magic " + stats[2] + ", Max MP " + stats[3] + "]";
+        }
+
+        public void GainXP()
+        {
+
         }
     }
 }
