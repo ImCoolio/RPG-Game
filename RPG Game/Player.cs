@@ -151,19 +151,31 @@ namespace RPG_Game
         public void move(String decision)
         {
             if (decision == "w") {
-                Y++;
+                if (Y != 10)
+                    Y++;
+                else
+                    WriteLine("You have reached the Northern Border of the island.");
             }
             if (decision == "s")
             {
-                Y--;
+                if (Y != 0)
+                    Y--;
+                else
+                    WriteLine("You have reached the Northern Border of the island.");
             }
             if (decision == "a")
             {
-                X--;
+                if (X != 0)
+                    X--;
+                else
+                    WriteLine("You have reached the Northern Border of the island.");
             }
             if (decision == "d")
             {
-                X++;
+                if (X != 10)
+                    X++;
+                else
+                    WriteLine("You have reached the Northern Border of the island.");
             }
         }
 
