@@ -19,8 +19,8 @@ namespace RPG_Game
 
         public static void CreateMap()
         {
-            for (int i = 0; i <= mapSize.GetUpperBound(0) - 1; i++)
-                for (int j = 0; j <= mapSize.GetUpperBound(1) - 1; j++) 
+            for (int i = 0; i <= mapSize.GetUpperBound(0); i++)
+                for (int j = 0; j <= mapSize.GetUpperBound(1); j++) 
                 {
                         progress++;
                         int randomPlace = ran.Next(0, 100);
