@@ -23,8 +23,8 @@ namespace RPG_Game
         int[] stats;
         int X;
         int Y;
-        int hp;
-        int mp;
+        int maxhp;
+        int maxmp;
         int str;
         int mag;
 
@@ -49,25 +49,25 @@ namespace RPG_Game
                     playerWeapon = shortsword;
                     str = 20;
                     mag = 5;
-                    hp = 50 + (int) (str * 1.4);
-                    mp = 10 + (mag * 2);
-                    this.stats = new int[] { hp, str, mag, mp };
+                    maxhp = 50 + (int) (str * 1.4);
+                    maxmp = 10 + (mag * 2);
+                    this.stats = new int[] { maxhp, str, mag, maxmp };
                     break;
                 case "Mage":
                     mag = 20;
                     str = 7;
-                    hp = 20 + (int) (str * 1.4);
-                    mp = 40 + (mag * 2);
+                    maxhp = 20 + (int) (str * 1.4);
+                    maxmp = 40 + (mag * 2);
                     playerWeapon = staff;
-                    this.stats = new int[] { hp, str, mag, mp };
+                    this.stats = new int[] { maxhp, str, mag, maxmp };
                     break;
                 case "Rogue":
                     str = 14;
                     mag = 8;
-                    hp = 50 + (int) (str * 1.4);
-                    mp = 15 + (mag * 2);
+                    maxhp = 50 + (int) (str * 1.4);
+                    maxmp = 15 + (mag * 2);
                     playerWeapon = dagger;
-                    this.stats = new int[] { hp, str, mag, mp };
+                    this.stats = new int[] { maxhp, str, mag, maxmp };
                     break;
             }
         }
