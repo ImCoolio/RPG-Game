@@ -4,6 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static System.Console;
+using System.Windows.Forms;
+using static RPG_Game.dialogBox;
+using static RPG_Game.MapGeneration;
 
 namespace RPG_Game
 {
@@ -18,6 +21,12 @@ namespace RPG_Game
         int gold;
         String playerClass;
         int[] stats;
+        int X;
+        int Y;
+        int hp;
+        int mp;
+        int str;
+        int mag;
 
         Weapon shortsword = new Weapon("Shortsword", 20, 5);
         Weapon staff = new Weapon("Staff", 5, 20);
@@ -31,21 +40,34 @@ namespace RPG_Game
             this.xp = 0;
             this.gold = 100;
             this.playerClass = playerClass;
-            
+            this.X = 5;
+            this.Y = 5;
 
             switch (playerClass)
             {
                 case "Warrior":
                     playerWeapon = shortsword;
-                    this.stats = new int[] { 50, 20, 5, 7 };
+                    str = 20;
+                    mag = 5;
+                    hp = 50 + (int) (str * 1.4);
+                    mp = 10 + (mag * 2);
+                    this.stats = new int[] { hp, str, mag, mp };
                     break;
                 case "Mage":
+                    mag = 20;
+                    str = 7;
+                    hp = 20 + (int) (str * 1.4);
+                    mp = 40 + (mag * 2);
                     playerWeapon = staff;
-                    this.stats = new int[] { 25, 5, 20, 10 };
+                    this.stats = new int[] { hp, str, mag, mp };
                     break;
                 case "Rogue":
-                    playerWeapon = dagger; 
-                    this.stats = new int[] { 35, 14, 8, 15 };
+                    str = 14;
+                    mag = 8;
+                    hp = 50 + (int) (str * 1.4);
+                    mp = 15 + (mag * 2);
+                    playerWeapon = dagger;
+                    this.stats = new int[] { hp, str, mag, mp };
                     break;
             }
         }
@@ -63,7 +85,11 @@ namespace RPG_Game
                     {
                         throw new Exception();
                     }
-                    break;
+                    var nameDecision = CreateQuestionBox("Is your name " + name + "?", "Name Verification");
+                    if (nameDecision == DialogResult.Yes)
+                    {
+                        break;
+                    }
                 }
                 catch (Exception)
                 {
@@ -103,8 +129,12 @@ namespace RPG_Game
                         default:
                             throw new Exception();
                     }
-                    Clear();
-                    break;
+                    var nameDecision = CreateQuestionBox("Are you sure you want to be a " + classSelection + "?", "Class Verification");
+                    if (nameDecision == DialogResult.Yes)
+                    {
+                        Clear();
+                        break;
+                    }
                 }
                 catch (Exception)
                 {
@@ -116,6 +146,69 @@ namespace RPG_Game
             WriteLine("Class Selected: " + classSelection + "...\n");
             String[] playerDetails = { name, classSelection };
             return playerDetails;
+        }
+
+        public void move(String decision)
+        {
+            if (decision == "w") {
+                Y++;
+            }
+            if (decision == "s")
+            {
+                Y--;
+            }
+            if (decision == "a")
+            {
+                X--;
+            }
+            if (decision == "d")
+            {
+                X++;
+            }
+        }
+
+        public int[] getLocation()
+        {
+            int[] location = { X - 5, Y - 5 };
+            return location;
+        }
+
+        public void getLocationType()
+        {
+            if (mapSize[X, Y] == 1)
+            {
+                WriteLine("\nYou see a town.\n");
+                WriteLine("W/S/A/D to Move (W = Up, A = Left, S = Down, D = Right");
+                WriteLine("Q - Enter Shop (NOT YET IMPLEMENTED)");
+                WriteLine("H - Heal at the Inn | 5 Gold\n");
+                WriteLine("Z - Quit Game");
+            }
+
+            if (mapSize[X, Y] == 2)
+            {
+                WriteLine("You are in a cave.");
+                WriteLine("W/S/A/D to Move (W = Up, A = Left, S = Down, D = Right");
+                WriteLine("E to Fight " + EnemyGeneration());
+                WriteLine("Z - Quit Game");
+            }
+
+            if (mapSize[X, Y] == 3)
+            {
+                WriteLine("You see a church.");
+                WriteLine("W/S/A/D to Move (W = Up, A = Left, S = Down, D = Right");
+                WriteLine("Q - Speak to Priest");
+                WriteLine("H - Heal at the Church | 3 Gold\n");
+                WriteLine("Z - Quit Game");
+            }
+
+            if (mapSize[X, Y] == 4)
+            {
+                WriteLine("You see grass and many trees.");
+                WriteLine("W/S/A/D to Move (W = Up, A = Left, S = Down, D = Right");
+                WriteLine("E - Search Around");
+                WriteLine("Z - Quit Game");
+            }
+
         }
 
         override

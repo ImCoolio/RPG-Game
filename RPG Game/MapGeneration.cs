@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using static System.Console;
+using static RPG_Game.EnemyHandler;
 
 namespace RPG_Game
 {
@@ -28,27 +29,52 @@ namespace RPG_Game
                             mapSize[i, j] = 1;
                         }
                         else if (randomPlace > 10 && randomPlace <= 55)
-                        {
                             mapSize[i, j] = 2;
-                        }
                         else if (randomPlace > 55 && randomPlace <= 70 && currentChurches != maxChurches)
                         {
                             currentChurches++;
                             mapSize[i, j] = 3;
                         }
                         else if (randomPlace > 70 || currentChurches == maxChurches || currentTowns == maxTowns)
-                        {
                             mapSize[i, j] = 4;
-                        }
-                    if (progress < 121)
-                        Write("Loading.. " + String.Format("{0:0.##}", progress / 1.21) + "%\n");
+
+                        if (progress < 121)
+                            Write("Loading.. " + String.Format("{0:0.##}", progress / 1.21) + "%\n");
                 }
             mapSize[5, 5] = 1;
         }
 
-        public static int getLocation(int x, int y)
+        public static String EnemyGeneration()
         {
-            return mapSize[x, y];
+            int randomPlace = ran.Next(0, 100);
+
+            if (randomPlace <= 10)
+            {
+                Alligator alligator = new Alligator();
+                return "Alligator (HARD)";
+            }
+            else if (randomPlace > 10 && randomPlace <= 25)
+            {
+                SkeletonMage skeleMage = new SkeletonMage();
+                return "Alligator (Medium)";
+            }
+            else if (randomPlace > 25 && randomPlace <= 35)
+            {
+                Skeleton skeleton = new Skeleton();
+                return "Alligator (Normal)";
+            }
+            else if (randomPlace > 35 && randomPlace <= 85)
+            {
+                Rat rat = new Rat();
+                return "Alligator (Easy)";
+            }
+            else if (randomPlace > 85)
+            {
+                Bat bat = new Bat();
+                return "Alligator (Easy)";
+            }
+
+            return "Error.";
         }
     }
 }
