@@ -18,8 +18,8 @@ namespace RPG_Game
 
         public static void CreateMap()
         {
-            for (int i = 0; i <= 10; i++)
-                for (int j = 0; j <= 10; j++) 
+            for (int i = 0; i <= mapSize.GetUpperBound(0) - 1; i++)
+                for (int j = 0; j <= mapSize.GetUpperBound(1) - 1; j++) 
                 {
                         progress++;
                         int randomPlace = ran.Next(0, 100);
@@ -56,22 +56,22 @@ namespace RPG_Game
             else if (randomPlace > 10 && randomPlace <= 25)
             {
                 SkeletonMage skeleMage = new SkeletonMage();
-                return "Alligator (Medium)";
+                return "Skeleton Mage (Medium)";
             }
             else if (randomPlace > 25 && randomPlace <= 35)
             {
                 Skeleton skeleton = new Skeleton();
-                return "Alligator (Normal)";
+                return "Skeleton (Normal)";
             }
             else if (randomPlace > 35 && randomPlace <= 85)
             {
                 Rat rat = new Rat();
-                return "Alligator (Easy)";
+                return "Rat (Easy)";
             }
             else if (randomPlace > 85)
             {
                 Bat bat = new Bat();
-                return "Alligator (Easy)";
+                return "Bat (Easy)";
             }
 
             return "Error.";
