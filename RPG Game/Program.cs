@@ -68,7 +68,7 @@ namespace RPG_Game
                             //Beginning of game
                             while (true)
                             {
-                                int[] currentLocation = player.getLocation();
+                                Clear(); int[] currentLocation = player.getLocation();
                                 Write("You are currently at (" + currentLocation[0] + ", " + currentLocation[1] + "). ");
                                 player.getLocationType();
 
