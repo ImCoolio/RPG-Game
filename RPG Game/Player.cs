@@ -154,28 +154,28 @@ namespace RPG_Game
                 if (Y != 10)
                     Y++;
                 else
-                    WriteLine("You have reached the Northern Border of the island.");
+                    WriteLine("You have reached the northern border of the island.");
             }
             if (decision == "s")
             {
                 if (Y != 0)
                     Y--;
                 else
-                    WriteLine("You have reached the Northern Border of the island.");
+                    WriteLine("You have reached the southern border of the island.");
             }
             if (decision == "a")
             {
                 if (X != 0)
                     X--;
                 else
-                    WriteLine("You have reached the Northern Border of the island.");
+                    WriteLine("You have reached the western border of the island.");
             }
             if (decision == "d")
             {
                 if (X != 10)
                     X++;
                 else
-                    WriteLine("You have reached the Northern Border of the island.");
+                    WriteLine("\nYou have reached the eastern border of the island.\n");
             }
         }
 
@@ -189,7 +189,7 @@ namespace RPG_Game
         {
             if (mapSize[X, Y] == 1)
             {
-                WriteLine("\nYou see a town.\n");
+                WriteLine("You see a town.\n");
                 WriteLine("W/S/A/D to Move (W = Up, A = Left, S = Down, D = Right");
                 WriteLine("Q - Enter Shop (NOT YET IMPLEMENTED)");
                 WriteLine("H - Heal at the Inn | 5 Gold\n");
@@ -198,7 +198,7 @@ namespace RPG_Game
 
             if (mapSize[X, Y] == 2)
             {
-                WriteLine("You are in a cave.");
+                WriteLine("You are in a cave.\n");
                 WriteLine("W/S/A/D to Move (W = Up, A = Left, S = Down, D = Right");
                 WriteLine("E to Fight " + EnemyGeneration());
                 WriteLine("Z - Quit Game");
@@ -206,7 +206,7 @@ namespace RPG_Game
 
             if (mapSize[X, Y] == 3)
             {
-                WriteLine("You see a church.");
+                WriteLine("You see a church.\n");
                 WriteLine("W/S/A/D to Move (W = Up, A = Left, S = Down, D = Right");
                 WriteLine("Q - Speak to Priest");
                 WriteLine("H - Heal at the Church | 3 Gold\n");
@@ -215,7 +215,7 @@ namespace RPG_Game
 
             if (mapSize[X, Y] == 4)
             {
-                WriteLine("You see grass and many trees.");
+                WriteLine("You see grass and many trees, but not a soul in sight.\n");
                 WriteLine("W/S/A/D to Move (W = Up, A = Left, S = Down, D = Right");
                 WriteLine("E - Search Around");
                 WriteLine("Z - Quit Game");
@@ -226,7 +226,7 @@ namespace RPG_Game
         override
         public String ToString()
         {
-            return "Player [name= " + name + ", level= " + level + ", xp= " + xp + ", gold=" + gold + ", playerClass= " + playerClass + ", playerWeapon= " + playerWeapon.ToString() + ", stats: HP " + stats[0] + ", STR " + stats[1] + ", Magic " + stats[2] + ", SPD " + stats[3] + "]";
+            return "Player [name= " + name + ", level= " + level + ", xp= " + xp + ", gold=" + gold + ", playerClass= " + playerClass + ", playerWeapon= " + playerWeapon.ToString() + ", stats: HP " + stats[0] + ", STR " + stats[1] + ", Magic " + stats[2] + ", Max MP " + stats[3] + "]";
         }
     }
 }
