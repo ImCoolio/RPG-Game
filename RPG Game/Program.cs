@@ -52,10 +52,11 @@ namespace RPG_Game
                             String[] names = CreatePlayerPrompt();
                             Player player = new Player(names[0], names[1]);
 
-                            WriteLine(player.GetStats() + "\n");
+                            WriteLine(player.GetStats());
                             WriteLine("Player created!");
                             Thread.Sleep(2000);
 
+                            //Map Generation
                             WriteLine("Generating world...");
                             CreateMap();
                             Clear();
@@ -64,6 +65,7 @@ namespace RPG_Game
                             Thread.Sleep(2000);
 
                             Clear();
+                            //Beginning of game
                             while (true)
                             {
                                 int[] currentLocation = player.getLocation();
@@ -71,9 +73,15 @@ namespace RPG_Game
                                 player.getLocationType();
 
                                 Write("\nChoose your next option: ");
+
                                 String decision = ReadLine(); decision = decision.ToLower();
+
                                 if (decision == "w" || decision == "s" || decision == "a" || decision == "d")
                                     player.move(decision);
+
+                                if (decision == "x")
+                                    WriteLine(player.GetStats());
+
                                 if (decision == "z") {
                                     Clear();
                                     WriteLine("Thanks for playing The Graceful Legend RPG.");
