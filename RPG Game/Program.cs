@@ -32,7 +32,18 @@ namespace RPG_Game
                 WriteLine("1 - Play");
                 WriteLine("2 - Information");
                 WriteLine("3 - Exit");
-                choice = int.Parse(ReadLine());
+                while (true) {
+                    try
+                    {
+                        choice = int.Parse(ReadLine());
+                        break;
+                    }
+                    catch (Exception)
+                    {
+                        WriteLine("Invalid option. Please retry.");
+                    }
+
+                }
                 try
                 {
                     switch (choice)
