@@ -13,6 +13,10 @@ namespace RPG_Game
     // Stat Order, [Max HP, Strength, Magic, Speed]
     internal class Player
     {
+        String movePrompt = "W/S/A/D to Move (W = Up, A = Left, S = Down, D = Right";
+        String quitPrompt = "Z - Quit Game";
+        String statPrompt = "X - Character Information";
+
         static String name;
         String finishedName;
         static String classSelection;
@@ -190,35 +194,39 @@ namespace RPG_Game
             if (mapSize[X, Y] == 1)
             {
                 WriteLine("You see a town.\n");
-                WriteLine("W/S/A/D to Move (W = Up, A = Left, S = Down, D = Right");
+                WriteLine(movePrompt);
                 WriteLine("Q - Enter Shop (NOT YET IMPLEMENTED)");
-                WriteLine("H - Heal at the Inn | 5 Gold\n");
-                WriteLine("Z - Quit Game");
+                WriteLine("F - Heal at the Inn | 5 Gold\n");
+                WriteLine(statPrompt);
+                WriteLine(quitPrompt);
             }
 
             if (mapSize[X, Y] == 2)
             {
                 WriteLine("You are in a cave.\n");
-                WriteLine("W/S/A/D to Move (W = Up, A = Left, S = Down, D = Right");
+                WriteLine(movePrompt);
                 WriteLine("E to Fight " + EnemyGeneration());
-                WriteLine("Z - Quit Game");
+                WriteLine(statPrompt);
+                WriteLine(quitPrompt);
             }
 
             if (mapSize[X, Y] == 3)
             {
                 WriteLine("You see a church.\n");
-                WriteLine("W/S/A/D to Move (W = Up, A = Left, S = Down, D = Right");
+                WriteLine(movePrompt);
                 WriteLine("Q - Speak to Priest");
-                WriteLine("H - Heal at the Church | 3 Gold\n");
-                WriteLine("Z - Quit Game");
+                WriteLine("F - Heal at the Church | 3 Gold\n");
+                WriteLine(statPrompt);
+                WriteLine(quitPrompt);
             }
 
             if (mapSize[X, Y] == 4)
             {
                 WriteLine("You see grass and many trees, but not a soul in sight.\n");
-                WriteLine("W/S/A/D to Move (W = Up, A = Left, S = Down, D = Right");
+                WriteLine(movePrompt);
                 WriteLine("E - Search Around");
-                WriteLine("Z - Quit Game");
+                WriteLine(statPrompt);
+                WriteLine(quitPrompt);
             }
 
         }
@@ -227,7 +235,7 @@ namespace RPG_Game
         {
            WriteLine("\n" + name + "'s information");
 
-           return "name= " + name + ", level= " + level + ", xp= " + xp + ", gold=" + gold + ", playerClass= " + playerClass + ", currentWeapon= " + playerWeapon.ToString() + ", stats: HP " + stats[0] + ", STR " + stats[1] + ", Magic " + stats[2] + ", Max MP " + stats[3] + "]";
+           return "name= " + name + ", level= " + level + ", xp= " + xp + ", gold=" + gold + ", playerClass= " + playerClass + ", currentWeapon= " + playerWeapon.ToString() + ", stats: HP " + stats[0] + ", STR " + stats[1] + ", Magic " + stats[2] + ", Max MP " + stats[3] + "\n";
         }
 
         public void GainXP()
