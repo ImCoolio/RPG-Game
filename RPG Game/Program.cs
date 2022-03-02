@@ -16,7 +16,7 @@ namespace RPG_Game
             Title = "The Graceful Legend RPG";
             ForegroundColor = ConsoleColor.Yellow;
             WindowHeight = 40;
-            WindowWidth = 120;
+            WindowWidth = 200;
             int choice = 0;
             Boolean closeGame = false;
 
@@ -52,7 +52,7 @@ namespace RPG_Game
                             String[] names = CreatePlayerPrompt();
                             Player player = new Player(names[0], names[1]);
 
-                            WriteLine(player.ToString() + "\n");
+                            WriteLine(player.GetStats() + "\n");
                             WriteLine("Player created!");
                             Thread.Sleep(2000);
 
