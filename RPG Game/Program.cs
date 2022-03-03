@@ -31,7 +31,7 @@ namespace RPG_Game
                 WriteLine("   TT    G    G LL         R R    P      G    G");
                 WriteLine("   TT     GGGG  LLLLLL     R  RR  P       GGGG \n\n");
 
-                WriteLine("Welcome to \"The Graceful Legend RPG.\"\n");
+                WriteLine("Welcome to \"The Graceful Legend RPG.\" Version 0.3 Alpha\n");
                 WriteLine("1 - Play");
                 Write("2 - Continue Previous Save "); SaveFileCount();
                 WriteLine("3 - Information");
@@ -69,7 +69,7 @@ namespace RPG_Game
 
                         Clear();
                         //Beginning of game
-                        while (true)
+                        while (!player.dead)
                         {
                             int[] currentLocation = player.getLocation();
                             Write("You are currently at (" + currentLocation[0] + ", " + currentLocation[1] + "). ");
@@ -87,14 +87,41 @@ namespace RPG_Game
                                     break;
 
                                 case ("e"):
-                                    while (!enemies[player.GetX(), player.GetY()].Dead)
+                                    if (player.getLocationType() == 2)
                                     {
-                                        player.Attack(enemies[player.GetX(), player.GetY()], player);
+                                        while (!(enemies[player.GetX(), player.GetY()].Dead) && !player.getRun() && !(enemies[player.GetX(), player.GetY()].escape) && !player.getDead())
+                                        {
+                                            player.Attack(enemies[player.GetX(), player.GetY()], player);
+                                        }
+                                        player.run = false;
+                                        break;
                                     }
-
-                                    Clear();
-                                    break;
-
+                                    else
+                                    {
+                                        Clear();
+                                        WriteLine("Invalid choice, please retry.\n");
+                                        break;
+                                    }
+                                case ("f"):
+                                    if (player.getLocationType() == 1 || player.getLocationType() == 3)
+                                    {
+                                        switch (player.getLocationType())
+                                        {
+                                            case 1:
+                                                player.Heal(1);
+                                                break;
+                                            case 3:
+                                                player.Heal(2);
+                                                break;
+                                        }
+                                        break;
+                                    }   
+                                    else
+                                    {
+                                        Clear();
+                                        WriteLine("Invalid choice, please retry.\n");
+                                        break;
+                                    }
                                 case ("x"):
                                     Clear(); player.GetStats();
                                     break;
@@ -113,8 +140,9 @@ namespace RPG_Game
                                     break;
                             }
 
-                            if (closeGame == true)
+                            if (closeGame || player.getDead())
                             {
+                                choice = 0;
                                 break;
                             }
                         }
@@ -124,15 +152,15 @@ namespace RPG_Game
                             break;
                         case 3:
                             WriteLine("\nINFORMATION\nThe Graceful Legend RPG is a C# created by coolius. In this game, the worlds are randomly generated and so are the enemies.");
-                            WriteLine("The 4 stats are HP, Strength, Magic and MP. You can gain magic moves and heal at churches. (NOT YET IMPLEMENTED)");
-                            WriteLine("At towns, you can purchase new items (NOT YET IMPLEMENTED) and heal. As well, you can get quests (NOT YET IMPLEMENTED).");
+                            WriteLine("The 4 stats are HP, Strength, Magic and MP. You can gain magic moves and heal at churches. (MAGIC MOVES NOT YET IMPLEMENTED)");
+                            WriteLine("At towns, you can purchase new items (NOT YET IMPLEMENTED) and heal (added per v0.3 alpha). As well, you can get quests (NOT YET IMPLEMENTED).");
                             WriteLine("The 3 classes are Warrior (Primarily HP/Strength), Mage (Primary Magic/MP) (Currently only has a strength attack. Implementing magic next.) and Rogue (Balanced Strength/Magic).\n");
                             break;
                         case 4:
                             closeGame = true;
                             break;
-                    default:
-                        Clear();
+                        default:
+                            Clear();
                             WriteLine("Invalid option, please reselect an option.\n");
                             break;
                 }

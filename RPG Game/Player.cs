@@ -35,9 +35,12 @@ namespace RPG_Game
         int mag;
         int hp;
         int mp;
+        public Boolean run = false;
+        public Boolean dead = false;
+        int defending;
 
-        Weapon shortsword = new Weapon("Shortsword", 20, 5);
-        Weapon staff = new Weapon("Staff", 5, 20);
+        Weapon shortsword = new Weapon("Shortsword", 15, 5);
+        Weapon staff = new Weapon("Staff", 5, 15);
         Weapon dagger = new Weapon("Dagger", 12, 7);
         Weapon playerWeapon;
 
@@ -53,8 +56,8 @@ namespace RPG_Game
             {
                 case "Warrior":
                     playerWeapon = shortsword;
-                    str = 20;
-                    mag = 5;
+                    str = 15;
+                    mag = 7;
                     maxhp = 50 + (int) (str * 1.4);
                     maxmp = 10 + (mag * 2);
                     hp = maxhp;
@@ -62,9 +65,9 @@ namespace RPG_Game
                     stats = new int[] { maxhp, str, mag, maxmp };
                     break;
                 case "Mage":
-                    mag = 20;
+                    mag = 15;
                     str = 7;
-                    maxhp = 20 + (int) (str * 1.4);
+                    maxhp = 1 + (int) (str * 1.4);
                     maxmp = 40 + (mag * 2);
                     playerWeapon = staff;
                     hp = maxhp;
@@ -87,7 +90,7 @@ namespace RPG_Game
         public static String[] CreatePlayerPrompt()
         {
             while (true)
-            {
+            { 
                 Console.Write("Please input the name you would like for your character: ");
                 name = ReadLine();
                 name = name.Trim();
@@ -201,7 +204,7 @@ namespace RPG_Game
             return location;
         }
 
-        public void getLocationType()
+        public int getLocationType()
         {
             if (mapSize[X, Y] == 1)
             {
@@ -211,11 +214,11 @@ namespace RPG_Game
                 WriteLine("F - Heal at the Inn | 5 Gold (NOT YET IMPLEMENTED)\n");
                 WriteLine(statPrompt);
                 WriteLine(quitPrompt);
+                return 1;
             }
 
             if (mapSize[X, Y] == 2)
             {
-                EnemyGeneration(X, Y);
                 WriteLine("You are in a cave.\n");
                 WriteLine(movePrompt);
                 if (enemies[X, Y] != null)
@@ -225,8 +228,18 @@ namespace RPG_Game
                         WriteLine("E to Fight " + enemies[X, Y].enemyName);
                     }
                 }
+                else if (enemies[X, Y] == null)
+                {
+                    EnemyGeneration(X, Y);
+
+                    if (enemies[X,Y] != null)
+                    {
+                        WriteLine("E to Fight " + enemies[X, Y].enemyName);
+                    }
+                }
                 WriteLine(statPrompt);
                 WriteLine(quitPrompt);
+                return 2;
             }
 
             if (mapSize[X, Y] == 3)
@@ -237,6 +250,7 @@ namespace RPG_Game
                 WriteLine("F - Heal at the Church | 3 Gold\n");
                 WriteLine(statPrompt);
                 WriteLine(quitPrompt);
+                return 3;
             }
 
             if (mapSize[X, Y] == 4)
@@ -246,87 +260,124 @@ namespace RPG_Game
                 WriteLine("E - Search Around");
                 WriteLine(statPrompt);
                 WriteLine(quitPrompt);
+                return 4;
             }
+
+            return 0;
 
         }
 
         public void Attack(EnemyHandler enemy, Player player)
         {
             Clear();
-            Boolean finish = false;
+            run = false;
             int damage = str + playerWeapon.GetStr();
-            int defending = 0;
+            defending = 0;
             WriteLine("A " + enemy.enemyName + " has appeared!\n");
-            while (true)
+            while (true || !enemy.escape || !getDead())
             {
                 enemy.waiting();
 
-                WriteLine("Your HP: " + hp + "/" + maxhp + " & MP: " + mp + "/" + maxmp); 
+                WriteLine("Your HP: " + hp + "/" + maxhp + " & MP: " + mp + "/" + maxmp);
 
                 WriteLine("Choose your next action:");
                 WriteLine("Q - Defend");
                 WriteLine("E - Attack");
                 WriteLine("F - Use Magic");
                 WriteLine("G - Run");
-
-                String decision = ReadLine(); decision = decision.ToLower();
-
-                switch (decision)
+                while (true)
                 {
-                    case "q":
-                        if (defending == 1)
+                    try
+                    {
+                        String decision = ReadLine(); decision = decision.ToLower();
+
+                        if (decision == "q" || decision == "e" || decision == "f" || decision == "g")
                         {
-                            Clear();
-                            WriteLine("You already are defending, choose another option.\n");
-                            Thread.Sleep(1000);
+
+                            switch (decision)
+                            {
+                                case "q":
+                                    if (defending == 1)
+                                    {
+                                        WriteLine("You already are defending, choose another option.\n");
+                                        Thread.Sleep(1000);
+                                    }
+                                    else if (defending == 0)
+                                    {
+                                        defending = 1;
+                                        WriteLine("You are now defending against any incoming attack. (Take 1/2 Damage)");
+                                        Thread.Sleep(1000);
+                                        break;
+                                    }
+                                    break;
+                                case "e":
+                                    if (enemy.defending == 1)
+                                    {
+                                        WriteLine("You attacked the " + enemy.enemyName + " for " + (int) damage/2 + " damage!");
+                                    }
+                                    else
+                                        WriteLine("You attacked the " + enemy.enemyName + " for " + damage + " damage!");
+                                        
+                                    enemy.subtractHP(damage);
+                                    WriteLine("The " + enemy.enemyName + " has " + enemy.hp + " out of " + enemy.maxhp + " HP remaining!");
+                                    Thread.Sleep(1000);
+                                    break;
+                                case "f":
+                                    Clear();
+                                    WriteLine("Please choose another option as this has not been implemented.");
+                                    Thread.Sleep(1000);
+                                    break;
+                                case "g":
+                                    Clear();
+                                    WriteLine("You successfully escaped!");
+                                    run = true;
+                                    Thread.Sleep(1000);
+                                    break;
+                            }
+                            break;
                         }
-                        else if (defending == 0)
-                        {
-                            defending = 1;
-                            WriteLine("You are now defending against any incoming attack. (Take 1/2 Damage)");
-                            Thread.Sleep(1000);
-                        }
-                        break;
-                    case "e":
-                        WriteLine("You attacked the " + enemy.enemyName + " for " + damage + "!");
-                        enemy.subtractHP(damage);
-                        WriteLine("The " + enemy.enemyName + " has " + enemy.hp + " out of " + enemy.maxhp + " HP remaining!");
-                        Thread.Sleep(1000);
-                        Clear();
-                        break;
-                    case "f":
-                        Clear();
-                        WriteLine("Please choose another option as this has not been implemented.");
-                        Thread.Sleep(1000);
-                        break;
-                    case "g":
-                        Clear();
-                        WriteLine("You successfully escaped!");
-                        finish = true;
-                        Thread.Sleep(1000);
-                        break;
+                        else
+                            throw new Exception();
+                    }
+                    catch (Exception e)
+                    {
+                        WriteLine("Invalid choice. Please retry.");
+                    }
                 }
 
-                if (finish != true)
+                if (getRun())
                 {
-                    if (!enemy.Dead)
-                        enemy.chooseMove(player);
+                    Clear(); break;
+                }
 
-                    if (enemy.escape)
-                        break;
+                
+                if (!enemy.Dead)
+                {
+                    enemy.chooseMove(player);
+                }
 
-                    if (enemy.Dead)
-                    {
+                if (enemy.escape)
+                {
+                    Clear(); break;
+                }
+
+                if (player.hp == 0)
+                {
+                    player.isDead(enemy);
+                    break;
+                }
+
+                if (enemy.Dead)
+                {
                         WriteLine("You have defeated the " + enemy.enemyName + "!");
                         WriteLine("You gained " + enemy.getxp() + " XP!");
                         WriteLine("The enemy dropped " + enemy.getgold() + " gold.");
                         GainXP(enemy);
+                        GainGold(enemy);
                         Thread.Sleep(3000);
+                        Clear();
                         break;
-                    }
                 }
-                else if (finish == true)
-                    break;
             }
         }
 
@@ -348,7 +399,73 @@ namespace RPG_Game
 
         public void changeHP(int damage)
         {
-            hp -= damage;
+            if (defending == 1)
+            {
+                defending = 0;
+                hp -= (int)damage / 2;
+                if (hp < 0)
+                {
+                    hp = 0;
+                }
+                WriteLine("The attack did " + (int)damage / 2 + " damage!");
+            }
+            else
+            {
+                WriteLine("The attack did " + damage + " damage!");
+                hp -= damage;
+                if (hp < 0)
+                {
+                    hp = 0;
+                }
+            }
+        }
+
+        public void Heal(int place)
+        {
+            if (hp != maxhp)
+            {
+                switch (place)
+                {
+                    case 1:
+                        if (gold >= 5)
+                        {
+                            var inn = CreateQuestionBox("Are you sure you heal at the inn?", "Inn");
+                            if (inn == DialogResult.Yes)
+                            {
+                                Clear();
+                                hp = maxhp;
+                                mp = maxmp;
+                                gold -= 5;
+                                WriteLine("You healed at the inn. Your HP/MP is now full.\n");
+                            }
+                            else
+                                Clear();
+                        }
+                        break;
+                    case 2:
+                        if (gold >= 3)
+                        {
+                            var inn = CreateQuestionBox("Are you sure you heal at the church?", "Church");
+                            if (inn == DialogResult.Yes)
+                            {
+                                Clear();
+                                hp = maxhp;
+                                mp = maxmp;
+                                gold -= 3;
+                                WriteLine("You healed at the inn. Your HP/MP is now full.\n");
+                            }
+                            else
+                                Clear();
+                        }
+                        break;
+                }
+            }
+            else
+            {
+                Clear();
+                WriteLine("Your health is max. You cannot stay at the inn.\n");
+            }
+            
         }
 
         public string GetPlayerData()
@@ -359,6 +476,32 @@ namespace RPG_Game
         public void GainXP(EnemyHandler enemy)
         {
             xp += enemy.getxp();
+        }
+
+        public void GainGold(EnemyHandler enemy)
+        {
+            gold += enemy.getgold();
+        }
+
+        public void isDead(EnemyHandler enemy)
+        {
+            Clear();
+            WriteLine("You have been slain by " + enemy.enemyName + "!");
+            WriteLine("Here are your final stats: \n");
+            GetStats();
+            WriteLine("\nPress any key to return to main menu... ");
+            ReadKey();
+            Clear();
+            dead = true;
+        }
+
+        public Boolean getDead()
+        {
+            return dead;
+        }
+        public Boolean getRun()
+        {
+            return run;
         }
     }
 }

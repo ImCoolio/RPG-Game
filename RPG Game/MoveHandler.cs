@@ -6,28 +6,37 @@ using System.Threading.Tasks;
 
 namespace RPG_Game
 {
-    internal class MoveHandler
+    public abstract class MoveHandler
     {
+        public string moveName;
+        public int strValue;
+        public double multiplier;
+        public int damage;
 
-        public class Bite
+        protected MoveHandler(String moveName, int strValue, double multiplier)
         {
-            public string moveName;
-            public int strValue;
-            public double multiplier;
-            int damage;
-            public Bite(string moveName, int strValue, double multiplier) 
+            this.moveName = moveName;
+            this.strValue = strValue;
+            this.multiplier = multiplier;
+            damage = (int)(strValue * multiplier);
+        }
+
+        public abstract int getDamage();
+
+        public abstract string getName();
+
+        public class Bite : MoveHandler
+        {
+            public Bite() : base("Bite", 8, 1.2)
             {
-                this.moveName = moveName;
-                this.strValue = strValue;
-                this.multiplier = multiplier;
-                damage = (int) (strValue * multiplier);
+
             }
 
-            public int getDamage()
+            public override int getDamage()
             {
                 return damage;
             }
-            public string getName()
+            public override string getName()
             {
                 return moveName;
             }

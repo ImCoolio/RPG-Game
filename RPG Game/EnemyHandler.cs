@@ -42,7 +42,7 @@ namespace RPG_Game
 
         public abstract void chooseMove(Player player);
 
-        public abstract int attack();
+        public abstract int attack(MoveHandler move);
 
         public abstract void subtractHP(int damageRecieved);
 
@@ -63,33 +63,37 @@ namespace RPG_Game
     {
         public Rat() : base("Rat", 40, 20, 40, 20, 8, 5, 25, 5)
         {
-            
+
         } 
 
         public override void chooseMove(Player player)
         {
             if (hp != 0)
             {
-                if (defending == 0)
+                int random = ran.Next(0, 100);
+                if (random >= 0 && random <= 50)
                 {
-                    int random = ran.Next(0, 100);
-                    if (random >= 0 && random <= 50)
-                    {
-                        WriteLine("The attack did " + attack() + " damage!");
-                        player.changeHP(attack());
-                        Thread.Sleep(1000);
-                    }
-                    else if (random > 50 && random <= 75)
+                    Bite bite = new Bite();
+                    WriteLine("Rat used move " + bite.getName() + "!");
+                    player.changeHP(attack(bite));
+                    Thread.Sleep(1000);
+                }
+                else if (random > 50 && random <= 75)
+                {
+                    if (defending == 0)
                     {
                         defend();
                     }
-                    else if (random > 75 && random <= 100)
+                    else if (defending == 1)
                     {
-                        run();
+                        WriteLine(enemyName + " is still defending...");
+                        Thread.Sleep(1000);
                     }
                 }
-                else if (defending == 1)
-                    WriteLine(enemyName + " is currently defending...");
+                else if (random > 75 && random <= 100)
+                {
+                    run();
+                }
             }
             else if (hp == 0)
             {
@@ -103,12 +107,8 @@ namespace RPG_Game
             WriteLine("The wild rat is waiting... it has " + hp + "/" + maxhp + " HP remaining...\n");
         }
 
-        public override int attack()
+        public override int attack(MoveHandler bite)
         {
-            Bite bite = new Bite("Bite", base.str, 1.2);
-
-            WriteLine("Rat used move " + bite.getName() + "!");
-
             return bite.getDamage();
         }
 
@@ -167,7 +167,7 @@ namespace RPG_Game
 
         public override int getgold()
         {
-            return getgold();
+            return gold;
         }
     }
 }
