@@ -78,7 +78,7 @@ namespace RPG_Game
                     str = 14;
                     mag = 8;
                     maxhp = 35 + (int) (str * 1.4);
-                    maxmp = 20 + (int) (mag * 1/75);
+                    maxmp = 20 + (int) (mag * 1.75);
                     playerWeapon = dagger;
                     hp = maxhp;
                     mp = maxmp;
