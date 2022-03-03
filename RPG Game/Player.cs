@@ -208,7 +208,7 @@ namespace RPG_Game
                 WriteLine("You see a town.\n");
                 WriteLine(movePrompt);
                 WriteLine("Q - Enter Shop (NOT YET IMPLEMENTED)");
-                WriteLine("F - Heal at the Inn | 5 Gold\n");
+                WriteLine("F - Heal at the Inn | 5 Gold (NOT YET IMPLEMENTED)\n");
                 WriteLine(statPrompt);
                 WriteLine(quitPrompt);
             }
@@ -318,7 +318,8 @@ namespace RPG_Game
                     if (enemy.Dead)
                     {
                         WriteLine("You have defeated the " + enemy.enemyName + "!");
-                        WriteLine("You gained " + enemy.xp + " XP!");
+                        WriteLine("You gained " + enemy.getxp() + " XP!");
+                        WriteLine("The enemy dropped " + enemy.getgold() + " gold.");
                         GainXP(enemy);
                         Thread.Sleep(3000);
                         break;

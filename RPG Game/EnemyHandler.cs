@@ -23,10 +23,11 @@ namespace RPG_Game
         public int xp;
         public int damageTaken;
         public int defending;
+        public int gold;
         public Boolean Dead = false;
         public Boolean escape = false;
 
-        protected EnemyHandler(string enemyName, int maxhp, int maxmp, int hp, int mp, int str, int mag, int xp)
+        protected EnemyHandler(string enemyName, int maxhp, int maxmp, int hp, int mp, int str, int mag, int xp, int gold)
         {
             this.enemyName = enemyName;
             this.maxhp = maxhp;
@@ -36,6 +37,7 @@ namespace RPG_Game
             this.str = str;
             this.mag = mag;
             this.xp = xp;
+            this.gold = gold;
         }
 
         public abstract void chooseMove(Player player);
@@ -53,11 +55,13 @@ namespace RPG_Game
         public abstract void waiting();
 
         public abstract int getxp();
+
+        public abstract int getgold();
     }
 
     public class Rat : EnemyHandler
     {
-        public Rat() : base("Rat", 40, 20, 40, 20, 8, 5, 25)
+        public Rat() : base("Rat", 40, 20, 40, 20, 8, 5, 25, 5)
         {
             
         } 
@@ -159,6 +163,11 @@ namespace RPG_Game
         public override int getxp()
         {
             return xp;
+        }
+
+        public override int getgold()
+        {
+            return getgold();
         }
     }
 }
