@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
+using System.Threading;
 using static System.Console;
 using System.Windows.Forms;
 using static RPG_Game.dialogBox;
@@ -13,7 +15,7 @@ namespace RPG_Game
     // Stat Order, [Max HP, Strength, Magic, Speed]
     internal class Player
     {
-        String movePrompt = "W/S/A/D to Move (W = Up, A = Left, S = Down, D = Right";
+        String movePrompt = "W/S/A/D to Move (W = Up, A = Left, S = Down, D = Right)";
         String quitPrompt = "Z - Quit Game";
         String statPrompt = "X - Character Information";
 
@@ -25,12 +27,14 @@ namespace RPG_Game
         int gold;
         String playerClass;
         int[] stats;
-        int X;
-        int Y;
+        int X = 10;
+        int Y = 10;
         int maxhp;
         int maxmp;
         int str;
         int mag;
+        int hp;
+        int mp;
 
         Weapon shortsword = new Weapon("Shortsword", 20, 5);
         Weapon staff = new Weapon("Staff", 5, 20);
@@ -44,8 +48,6 @@ namespace RPG_Game
             this.xp = 0;
             this.gold = 100;
             this.playerClass = playerClass;
-            this.X = 5;
-            this.Y = 5;
 
             switch (playerClass)
             {
@@ -55,7 +57,9 @@ namespace RPG_Game
                     mag = 5;
                     maxhp = 50 + (int) (str * 1.4);
                     maxmp = 10 + (mag * 2);
-                    this.stats = new int[] { maxhp, str, mag, maxmp };
+                    hp = maxhp;
+                    mp = maxmp;
+                    stats = new int[] { maxhp, str, mag, maxmp };
                     break;
                 case "Mage":
                     mag = 20;
@@ -63,7 +67,9 @@ namespace RPG_Game
                     maxhp = 20 + (int) (str * 1.4);
                     maxmp = 40 + (mag * 2);
                     playerWeapon = staff;
-                    this.stats = new int[] { maxhp, str, mag, maxmp };
+                    hp = maxhp;
+                    mp = maxmp;
+                    stats = new int[] { maxhp, str, mag, maxmp };
                     break;
                 case "Rogue":
                     str = 14;
@@ -71,7 +77,9 @@ namespace RPG_Game
                     maxhp = 50 + (int) (str * 1.4);
                     maxmp = 15 + (mag * 2);
                     playerWeapon = dagger;
-                    this.stats = new int[] { maxhp, str, mag, maxmp };
+                    hp = maxhp;
+                    mp = maxmp;
+                    stats = new int[] { maxhp, str, mag, maxmp };
                     break;
             }
         }
@@ -146,7 +154,7 @@ namespace RPG_Game
                 }
                 catch (Exception)
                 {
-                    WriteLine("\nInvalid class choice.\n");
+                    WriteLine("\nInvalid class choice.");
                 }
             }
 
@@ -159,7 +167,7 @@ namespace RPG_Game
         public void move(String decision)
         {
             if (decision == "w") {
-                if (Y != 10)
+                if (Y != 20)
                     Y++;
                 else
                     WriteLine("You have reached the northern border of the island.");
@@ -180,7 +188,7 @@ namespace RPG_Game
             }
             if (decision == "d")
             {
-                if (X != 10)
+                if (X != 20)
                     X++;
                 else
                     WriteLine("\nYou have reached the eastern border of the island.\n");
@@ -189,7 +197,7 @@ namespace RPG_Game
 
         public int[] getLocation()
         {
-            int[] location = { X - 5, Y - 5 };
+            int[] location = { X - 10, Y - 10 };
             return location;
         }
 
@@ -207,9 +215,16 @@ namespace RPG_Game
 
             if (mapSize[X, Y] == 2)
             {
+                EnemyGeneration(X, Y);
                 WriteLine("You are in a cave.\n");
                 WriteLine(movePrompt);
-                WriteLine("E to Fight " + EnemyGeneration());
+                if (enemies[X, Y] != null)
+                {
+                    if (enemies[X, Y].Dead == false)
+                    {
+                        WriteLine("E to Fight " + enemies[X, Y].enemyName);
+                    }
+                }
                 WriteLine(statPrompt);
                 WriteLine(quitPrompt);
             }
@@ -235,16 +250,117 @@ namespace RPG_Game
 
         }
 
-        public string GetStats()
+        public void Attack(EnemyHandler enemy)
         {
-           WriteLine("\n" + name + "'s information");
+            Clear();
+            Boolean finish = false;
+            int damage = str + playerWeapon.GetStr();
+            int defending = 0;
+            WriteLine("A " + enemy.enemyName + " has appeared!\n");
+            while (true)
+            {
+                enemy.waiting();
 
-           return "name= " + name + ", level= " + level + ", xp= " + xp + ", gold=" + gold + ", playerClass= " + playerClass + ", currentWeapon= " + playerWeapon.ToString() + ", stats: HP " + stats[0] + ", STR " + stats[1] + ", Magic " + stats[2] + ", Max MP " + stats[3] + "\n";
+                WriteLine("Your HP: " + hp + "/" + maxhp + " & MP: " + mp + "/" + maxmp); 
+
+                WriteLine("Choose your next action:");
+                WriteLine("Q - Defend");
+                WriteLine("E - Attack");
+                WriteLine("F - Use Magic");
+                WriteLine("G - Run");
+
+                String decision = ReadLine(); decision = decision.ToLower();
+
+                switch (decision)
+                {
+                    case "q":
+                        if (defending == 1)
+                        {
+                            Clear();
+                            WriteLine("You already are defending, choose another option.\n");
+                            Thread.Sleep(1000);
+                        }
+                        else if (defending == 0)
+                        {
+                            defending = 1;
+                            WriteLine("You are now defending against any incoming attack. (Take 1/2 Damage)");
+                            finish = true;
+                            Thread.Sleep(1000);
+                        }
+                        break;
+                    case "e":
+                        WriteLine("You attacked the " + enemy.enemyName + " for " + damage + "!");
+                        enemy.subtractHP(damage);
+                        WriteLine("The " + enemy.enemyName + " has " + enemy.hp + " out of " + enemy.maxhp + " HP remaining!");
+                        Thread.Sleep(1000);
+                        Clear();
+                        finish = true;
+                        break;
+                    case "f":
+                        Clear();
+                        WriteLine("Please choose another option as this has not been implemented.");
+                        Thread.Sleep(1000);
+                        break;
+                    case "g":
+                        Clear();
+                        WriteLine("You successfully escaped!");
+                        Thread.Sleep(1000);
+                        break;
+                }
+
+                if (finish == true)
+                {
+                    if (!enemy.Dead)
+                        enemy.chooseMove();
+
+                    if (enemy.escape || decision == "g")
+                    {
+                        Thread.Sleep(1000);
+                        break;
+                    }
+
+
+                    if (enemy.Dead)
+                    {
+                        WriteLine("You have defeated the " + enemy.enemyName + "!");
+                        WriteLine("You gained " + enemy.xp + " XP!");
+                        GainXP(enemy);
+                        Thread.Sleep(3000);
+                        break;
+                    }
+                }
+            }
         }
 
-        public void GainXP()
+        public void GetStats()
+        {
+            WriteLine(name + "'s information");
+            WriteLine("level= " + level + ", xp= " + xp + ", gold=" + gold + "\nplayerClass= " + playerClass + ", currentWeapon= " + playerWeapon.ToString() + "\nstats: HP: " + hp + "/" + maxhp + ", STR " + str + ", Magic " + mag + ", Max MP " + mp + "/" + maxmp + "\n");
+        }
+
+        public int GetX()
+        {
+            return X;
+        }
+
+        public int GetY()
+        {
+            return Y;
+        }
+
+        public string GetPlayerData()
+        {
+            return "name= " + name + ", level= " + level + ", xp= " + xp + ", gold=" + gold + ", playerClass= " + playerClass + ", currentWeapon= " + playerWeapon + ", currentWeaponStats=" + playerWeapon.ToString() + ", stats: HP: " + hp + "/" + maxhp + ", STR " + str + ", Magic " + mag + ", Max MP " + mp + "/" + maxmp;
+        }
+
+        public void LoadPlayerData()
         {
 
+        }
+
+        public void GainXP(EnemyHandler enemy)
+        {
+            xp += enemy.getxp();
         }
     }
 }

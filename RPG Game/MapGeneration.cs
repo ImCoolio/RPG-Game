@@ -10,11 +10,11 @@ namespace RPG_Game
 {
     public class MapGeneration
     {
-        public static int currentChurches = 0; public static int maxChurches = 5;
-        public static int currentTowns = 0; public static int maxTowns = 3;
+        public static int currentChurches = 0; public static int maxChurches = 10;
+        public static int currentTowns = 0; public static int maxTowns = 6;
         public static Random ran = new Random();
-        public static int[,] mapSize = new int[11,11];
-        public static int[,] enemies = new int[11, 11];
+        public static int[,] mapSize = new int[21, 21];
+        public static EnemyHandler[,] enemies = new EnemyHandler[21, 21];
         public static int progress = 0;
 
         public static void CreateMap()
@@ -39,10 +39,10 @@ namespace RPG_Game
                         else if (randomPlace > 50 || currentChurches == maxChurches || currentTowns == maxTowns)
                             mapSize[i, j] = 4;
 
-                        if (progress < 121)
-                            Write("Loading.. " + String.Format("{0:0.##}", progress / 1.21) + "%\n");
+                        if (progress < 441)
+                            Write("Loading.. " + String.Format("{0:0.##}", progress / 4.41 + "%\n"));
                 }
-            mapSize[5, 5] = 1;
+            mapSize[10,10] = 1;
         }
 
         public static int[,] getMapDetails()
@@ -52,58 +52,56 @@ namespace RPG_Game
 
         public static String EnemyGeneration(int x, int y)
         {
-            if (enemies[x, y] == 0)
+            if (enemies[x, y] == null)
             {
                 int randomPlace = ran.Next(0, 100);
 
                 if (randomPlace <= 10)
                 {
-                    Alligator alligator = new Alligator();
-                    enemies[x, y] = 1;
-                    return "Alligator (HARD)";
+                    /*Alligator alligator = new Alligator();*//*
+                    enemies[x, y] = alligator;*/
                 }
                 else if (randomPlace > 10 && randomPlace <= 25)
                 {
-                    SkeletonMage skeleMage = new SkeletonMage();
-                    enemies[x, y] = 2;
-                    return "Skeleton Mage (Medium)";
+                    /*SkeletonMage skeleMage = new SkeletonMage();
+                    enemies[x, y] = skeleMage;*/
                 }
                 else if (randomPlace > 25 && randomPlace <= 35)
                 {
-                    Skeleton skeleton = new Skeleton();
-                    enemies[x, y] = 3;
-                    return "Skeleton (Normal)";
+                    /*Skeleton skeleton = new Skeleton();
+                    enemies[x, y] = skeleton;*/
                 }
                 else if (randomPlace > 35 && randomPlace <= 85)
                 {
                     Rat rat = new Rat();
-                    enemies[x, y] = 4;
+                    enemies[x, y] = rat;
                     return "Rat (Easy)";
                 }
                 else if (randomPlace > 85)
                 {
-                    Bat bat = new Bat();
-                    enemies[x, y] = 5;
-                    return "Bat (Easy)";
+                    /*Bat bat = new Bat();
+                    enemies[x, y] = bat;*/
                 }
             }
             else
                 switch (enemies[x, y])
                 {
-                    case 1:
+/*                    case Alligator alligator:
                         return "Alligator (HARD)";
-                        break;
-                    case 2:
+                        break;*/
+/*                    case 2:
                         return "Skeleton Mage (Medium)";
-                        break;
-                    case 3:
+                        break;*/
+/*                    case 3:
                         return "Skeleton (Normal)";
-                        break;
-                    case 4:
+                        break;*/
+                    case Rat rat:
                         return "Rat (Easy)";
                         break;
-                    case 5:
+/*                    case 5:
                         return "Bat (Easy)";
+                        break;*/
+                    default:
                         break;
                 }
 
