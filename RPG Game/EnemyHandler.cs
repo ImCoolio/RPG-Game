@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using static System.Console;
 using static RPG_Game.MoveHandler;
+using static RPG_Game.Player;
 
 namespace RPG_Game
 {
@@ -37,7 +38,7 @@ namespace RPG_Game
             this.xp = xp;
         }
 
-        public abstract void chooseMove();
+        public abstract void chooseMove(Player player);
 
         public abstract int attack();
 
@@ -61,7 +62,7 @@ namespace RPG_Game
             
         } 
 
-        public override void chooseMove()
+        public override void chooseMove(Player player)
         {
             if (hp != 0)
             {
@@ -71,6 +72,7 @@ namespace RPG_Game
                     if (random >= 0 && random <= 50)
                     {
                         WriteLine("The attack did " + attack() + " damage!");
+                        player.changeHP(attack());
                         Thread.Sleep(1000);
                     }
                     else if (random > 50 && random <= 75)
@@ -140,6 +142,7 @@ namespace RPG_Game
             {
                 WriteLine("The rat escaped!");
                 escape = true;
+                Thread.Sleep(1000);
             }
             else
             {

@@ -13,7 +13,7 @@ using static RPG_Game.MapGeneration;
 namespace RPG_Game
 {
     // Stat Order, [Max HP, Strength, Magic, Speed]
-    internal class Player
+    public class Player
     {
         String movePrompt = "W/S/A/D to Move (W = Up, A = Left, S = Down, D = Right)";
         String quitPrompt = "Z - Quit Game";
@@ -250,7 +250,7 @@ namespace RPG_Game
 
         }
 
-        public void Attack(EnemyHandler enemy)
+        public void Attack(EnemyHandler enemy, Player player)
         {
             Clear();
             Boolean finish = false;
@@ -284,7 +284,6 @@ namespace RPG_Game
                         {
                             defending = 1;
                             WriteLine("You are now defending against any incoming attack. (Take 1/2 Damage)");
-                            finish = true;
                             Thread.Sleep(1000);
                         }
                         break;
@@ -294,7 +293,6 @@ namespace RPG_Game
                         WriteLine("The " + enemy.enemyName + " has " + enemy.hp + " out of " + enemy.maxhp + " HP remaining!");
                         Thread.Sleep(1000);
                         Clear();
-                        finish = true;
                         break;
                     case "f":
                         Clear();
@@ -304,21 +302,18 @@ namespace RPG_Game
                     case "g":
                         Clear();
                         WriteLine("You successfully escaped!");
+                        finish = true;
                         Thread.Sleep(1000);
                         break;
                 }
 
-                if (finish == true)
+                if (finish != true)
                 {
                     if (!enemy.Dead)
-                        enemy.chooseMove();
+                        enemy.chooseMove(player);
 
-                    if (enemy.escape || decision == "g")
-                    {
-                        Thread.Sleep(1000);
+                    if (enemy.escape)
                         break;
-                    }
-
 
                     if (enemy.Dead)
                     {
@@ -329,6 +324,8 @@ namespace RPG_Game
                         break;
                     }
                 }
+                else if (finish == true)
+                    break;
             }
         }
 
@@ -348,14 +345,14 @@ namespace RPG_Game
             return Y;
         }
 
+        public void changeHP(int damage)
+        {
+            hp -= damage;
+        }
+
         public string GetPlayerData()
         {
             return "name= " + name + ", level= " + level + ", xp= " + xp + ", gold=" + gold + ", playerClass= " + playerClass + ", currentWeapon= " + playerWeapon + ", currentWeaponStats=" + playerWeapon.ToString() + ", stats: HP: " + hp + "/" + maxhp + ", STR " + str + ", Magic " + mag + ", Max MP " + mp + "/" + maxmp;
-        }
-
-        public void LoadPlayerData()
-        {
-
         }
 
         public void GainXP(EnemyHandler enemy)
