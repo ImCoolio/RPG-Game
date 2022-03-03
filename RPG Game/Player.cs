@@ -59,7 +59,7 @@ namespace RPG_Game
                     str = 15;
                     mag = 7;
                     maxhp = 50 + (int) (str * 1.4);
-                    maxmp = 10 + (mag * 2);
+                    maxmp = 10 + (int) (mag * 1.75);
                     hp = maxhp;
                     mp = maxmp;
                     stats = new int[] { maxhp, str, mag, maxmp };
@@ -67,8 +67,8 @@ namespace RPG_Game
                 case "Mage":
                     mag = 15;
                     str = 7;
-                    maxhp = 1 + (int) (str * 1.4);
-                    maxmp = 40 + (mag * 2);
+                    maxhp = 25 + (int) (str * 1.4);
+                    maxmp = 40 + (int) (mag * 1.75);
                     playerWeapon = staff;
                     hp = maxhp;
                     mp = maxmp;
@@ -77,8 +77,8 @@ namespace RPG_Game
                 case "Rogue":
                     str = 14;
                     mag = 8;
-                    maxhp = 50 + (int) (str * 1.4);
-                    maxmp = 15 + (mag * 2);
+                    maxhp = 35 + (int) (str * 1.4);
+                    maxmp = 20 + (int) (mag * 1/75);
                     playerWeapon = dagger;
                     hp = maxhp;
                     mp = maxmp;
