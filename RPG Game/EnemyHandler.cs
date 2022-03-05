@@ -61,7 +61,7 @@ namespace RPG_Game
 
     public class Rat : EnemyHandler
     {
-        public Rat() : base("Rat", 40, 20, 40, 20, 8, 5, 25, 5)
+        public Rat() : base("Rat", 60, 20, 60, 20, 12, 5, 35, 7)
         {
 
         } 

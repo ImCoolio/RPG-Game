@@ -20,10 +20,10 @@ namespace RPG_Game
         public abstract int getDamageOrHeal(EnemyHandler enemy);
 
         public class Fireball : MagicMoves {
-            public Fireball(int mag)
+            public Fireball(int mag, int magBoost)
             {
                 this.mag = mag;
-                this.damage = (int)(mag * 1.2);
+                this.damage = mag + magBoost;
                 this.moveName = "Fireball";
                 this.mpCost = 20;
             }

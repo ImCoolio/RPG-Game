@@ -70,12 +70,12 @@ namespace RPG_Game
                     mag = 15;
                     str = 7;
                     maxhp = 25 + (int) (str * 1.4);
-                    maxmp = 40 + (int) (mag * 1.75);
+                    maxmp = 30 + (int) (mag * 1.75);
                     playerWeapon = staff;
                     hp = maxhp;
                     mp = maxmp;
                     stats = new int[] { maxhp, str, mag, maxmp };
-                    Fireball fireball = new Fireball(mag);
+                    Fireball fireball = new Fireball(mag, playerWeapon.GetMag());
                     moves[0] = fireball;
                     break;
                 case "Rogue":

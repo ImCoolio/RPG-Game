@@ -31,7 +31,7 @@ namespace RPG_Game
                 WriteLine("   TT    G    G LL         R R    P      G    G");
                 WriteLine("   TT     GGGG  LLLLLL     R  RR  P       GGGG \n\n");
 
-                WriteLine("Welcome to \"The Graceful Legend RPG.\" Version 0.4 Alpha\n");
+                WriteLine("Welcome to \"The Graceful Legend RPG.\" Version 0.41 Alpha\n");
                 WriteLine("1 - Play");
                 Write("2 - Continue Previous Save "); SaveFileCount();
                 WriteLine("3 - Information");
@@ -153,9 +153,9 @@ namespace RPG_Game
                             break;
                         case 3:
                             WriteLine("\nINFORMATION\nThe Graceful Legend RPG is a C# created by coolius. In this game, the worlds are randomly generated and so are the enemies.");
-                            WriteLine("The 4 stats are HP, Strength, Magic and MP. You can gain magic moves and heal at churches. (MAGIC MOVES NOT YET IMPLEMENTED)");
+                            WriteLine("The 4 stats are HP, Strength, Magic and MP. You can gain magic moves and heal at churches. (cannot get magic moves at church yet)");
                             WriteLine("At towns, you can purchase new items (NOT YET IMPLEMENTED) and heal (added per v0.3 alpha). As well, you can get quests (NOT YET IMPLEMENTED).");
-                            WriteLine("The 3 classes are Warrior (Primarily HP/Strength), Mage (Primary Magic/MP) (Currently only has a strength attack. Implementing magic next.) and Rogue (Balanced Strength/Magic).\n");
+                            WriteLine("The 3 classes are Warrior (Primarily HP/Strength), Mage (Primary Magic/MP) and Rogue (Balanced Strength/Magic).\n");
                             break;
                         case 4:
                             closeGame = true;
