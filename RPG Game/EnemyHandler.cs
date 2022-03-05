@@ -142,7 +142,7 @@ namespace RPG_Game
         public override void run()
         {
             int random = ran.Next(0, 100);
-            if (random <= 15)
+            if (random <= 25)
             {
                 WriteLine("The rat escaped!");
                 escape = true;

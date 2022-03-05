@@ -75,6 +75,7 @@
   <ItemGroup>
     <Compile Include="dialogBox.cs" />
     <Compile Include="EnemyHandler.cs" />
+    <Compile Include="MagicMoves.cs" />
     <Compile Include="MapGeneration.cs" />
     <Compile Include="MoveHandler.cs" />
     <Compile Include="Player.cs" />

@@ -31,7 +31,7 @@ namespace RPG_Game
                 WriteLine("   TT    G    G LL         R R    P      G    G");
                 WriteLine("   TT     GGGG  LLLLLL     R  RR  P       GGGG \n\n");
 
-                WriteLine("Welcome to \"The Graceful Legend RPG.\" Version 0.3 Alpha\n");
+                WriteLine("Welcome to \"The Graceful Legend RPG.\" Version 0.4 Alpha\n");
                 WriteLine("1 - Play");
                 Write("2 - Continue Previous Save "); SaveFileCount();
                 WriteLine("3 - Information");
@@ -77,7 +77,7 @@ namespace RPG_Game
 
                             Write("\nChoose your next option: ");
 
-                            String decision = ReadLine(); decision = decision.ToLower();
+                            String decision = ReadLine(); decision = decision.ToLower().Trim();
 
                             switch (decision)
                             {
@@ -93,6 +93,7 @@ namespace RPG_Game
                                         {
                                             player.Attack(enemies[player.GetX(), player.GetY()], player);
                                         }
+                                        enemies[player.GetX(), player.GetY()].escape = false;
                                         player.run = false;
                                         break;
                                     }

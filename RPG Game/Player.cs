@@ -8,6 +8,7 @@ using System.Threading;
 using static System.Console;
 using System.Windows.Forms;
 using static RPG_Game.dialogBox;
+using static RPG_Game.MagicMoves;
 using static RPG_Game.MapGeneration;
 
 namespace RPG_Game
@@ -35,6 +36,7 @@ namespace RPG_Game
         int mag;
         int hp;
         int mp;
+        MagicMoves[] moves = new MagicMoves[3]; 
         public Boolean run = false;
         public Boolean dead = false;
         int defending;
@@ -73,10 +75,12 @@ namespace RPG_Game
                     hp = maxhp;
                     mp = maxmp;
                     stats = new int[] { maxhp, str, mag, maxmp };
+                    Fireball fireball = new Fireball(mag);
+                    moves[0] = fireball;
                     break;
                 case "Rogue":
-                    str = 14;
-                    mag = 8;
+                    str = 12;
+                    mag = 10;
                     maxhp = 35 + (int) (str * 1.4);
                     maxmp = 20 + (int) (mag * 1.75);
                     playerWeapon = dagger;
@@ -211,7 +215,7 @@ namespace RPG_Game
                 WriteLine("You see a town.\n");
                 WriteLine(movePrompt);
                 WriteLine("Q - Enter Shop (NOT YET IMPLEMENTED)");
-                WriteLine("F - Heal at the Inn | 5 Gold (NOT YET IMPLEMENTED)\n");
+                WriteLine("F - Heal at the Inn | 5 Gold\n");
                 WriteLine(statPrompt);
                 WriteLine(quitPrompt);
                 return 1;
@@ -246,7 +250,7 @@ namespace RPG_Game
             {
                 WriteLine("You see a church.\n");
                 WriteLine(movePrompt);
-                WriteLine("Q - Speak to Priest");
+                WriteLine("Q - Speak to Priest (NOT YET IMPLEMENTED)");
                 WriteLine("F - Heal at the Church | 3 Gold\n");
                 WriteLine(statPrompt);
                 WriteLine(quitPrompt);
@@ -257,7 +261,7 @@ namespace RPG_Game
             {
                 WriteLine("You see grass and many trees, but not a soul in sight.\n");
                 WriteLine(movePrompt);
-                WriteLine("E - Search Around");
+                WriteLine("E - Search Around (NOT YET IMPLEMENTED)");
                 WriteLine(statPrompt);
                 WriteLine(quitPrompt);
                 return 4;
@@ -276,17 +280,21 @@ namespace RPG_Game
             WriteLine("A " + enemy.enemyName + " has appeared!\n");
             while (true || !enemy.escape || !getDead())
             {
-                enemy.waiting();
+                if (mp != maxmp)
+                regenMP();
 
-                WriteLine("Your HP: " + hp + "/" + maxhp + " & MP: " + mp + "/" + maxmp);
-
-                WriteLine("Choose your next action:");
-                WriteLine("Q - Defend");
-                WriteLine("E - Attack");
-                WriteLine("F - Use Magic");
-                WriteLine("G - Run");
                 while (true)
                 {
+                    enemy.waiting();
+
+                    WriteLine("Your HP: " + hp + "/" + maxhp + " & MP: " + mp + "/" + maxmp);
+
+                    WriteLine("Choose your next action:");
+                    WriteLine("Q - Defend");
+                    WriteLine("E - Attack");
+                    WriteLine("F - Use Magic");
+                    WriteLine("G - Run");
+
                     try
                     {
                         String decision = ReadLine(); decision = decision.ToLower();
@@ -299,7 +307,7 @@ namespace RPG_Game
                                 case "q":
                                     if (defending == 1)
                                     {
-                                        WriteLine("You already are defending, choose another option.\n");
+                                        WriteLine("You already are defending, choose another option next turn.\n");
                                         Thread.Sleep(1000);
                                     }
                                     else if (defending == 0)
@@ -323,12 +331,88 @@ namespace RPG_Game
                                     Thread.Sleep(1000);
                                     break;
                                 case "f":
-                                    Clear();
-                                    WriteLine("Please choose another option as this has not been implemented.");
-                                    Thread.Sleep(1000);
+                                    if (moves[0] != null)
+                                    {
+                                        int i = 0;
+                                        char move = 'E';
+                                        string chooseMove;
+                                        WriteLine("Choose a magic move:");
+                                        foreach (MagicMoves element in moves)
+                                        {
+                                            if (element != null)
+                                            {
+                                                WriteLine(move + " - " + moves[i].getName() + " (Cost: " + moves[i].getMpCost() + " MP)");
+                                                i++;
+                                                switch (i)
+                                                {
+                                                    case 1:
+                                                        move = 'R';
+                                                        break;
+                                                    case 2:
+                                                        move = 'T';
+                                                        break;
+                                                }
+                                            }
+                                            else
+                                            {
+                                                WriteLine("Z - Cancel");
+                                                break;
+                                            }
+                                        }
+
+                                        chooseMove = ReadLine(); chooseMove = chooseMove.ToLower();
+
+                                        while (true)
+                                        {
+                                            switch (chooseMove)
+                                            {
+                                                case "e":
+                                                    WriteLine("Using " + moves[0].getName() + ", you attacked the " + enemy.enemyName + " for " + moves[0].getDamageOrHeal(enemy) + " damage!");
+
+                                                    Thread.Sleep(500);
+                                                    enemy.subtractHP(moves[0].getDamageOrHeal(enemy));
+                                                    mp -= moves[0].getMpCost();
+                                                    break;
+                                                case "r":
+                                                    if (moves[1] != null)
+                                                    {
+                                                        WriteLine("Using " + moves[1].getName() + ", you attacked the " + enemy.enemyName + " for " + moves[1].getDamageOrHeal(enemy) + " damage!");
+                                                        Thread.Sleep(500);
+                                                        enemy.subtractHP(moves[1].getDamageOrHeal(enemy));
+                                                        mp -= moves[1].getMpCost();
+                                                    }
+                                                    else
+                                                        throw new Exception("There is move in this slot. Please select another option.");
+                                                    break;
+                                                case "t":
+                                                    if (moves[2] != null)
+                                                    {
+                                                        WriteLine("Using " + moves[2].getName() + ", you attacked the " + enemy.enemyName + " for " + (int)moves[2].getDamageOrHeal(enemy) / 2 + " damage!");
+                                                        Thread.Sleep(500);
+                                                        enemy.subtractHP(moves[2].getDamageOrHeal(enemy));
+                                                        mp -= moves[2].getMpCost();
+                                                    }
+                                                    else
+                                                        throw new Exception("There is move in this slot. Please select another option.");
+                                                    break;
+                                                case "z":
+                                                    Clear();
+                                                    throw new Exception("Cancelled move.");
+                                                    break;
+                                                default:
+                                                    throw new Exception("Invalid option. Please retry.");
+                                                    break;
+                                            }
+                                            break;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        WriteLine("You do not have any magic moves. Please select another option next turn.");
+                                        Thread.Sleep(1000);
+                                    }
                                     break;
                                 case "g":
-                                    Clear();
                                     WriteLine("You successfully escaped!");
                                     run = true;
                                     Thread.Sleep(1000);
@@ -337,11 +421,12 @@ namespace RPG_Game
                             break;
                         }
                         else
-                            throw new Exception();
+                            throw new Exception("Invalid choice. Please retry.");
                     }
                     catch (Exception e)
                     {
-                        WriteLine("Invalid choice. Please retry.");
+                        WriteLine(e.Message);
+                        Thread.Sleep(1000);
                     }
                 }
 
@@ -369,6 +454,8 @@ namespace RPG_Game
 
                 if (enemy.Dead)
                 {
+                        Thread.Sleep(500);
+                        Clear();
                         WriteLine("You have defeated the " + enemy.enemyName + "!");
                         WriteLine("You gained " + enemy.getxp() + " XP!");
                         WriteLine("The enemy dropped " + enemy.getgold() + " gold.");
@@ -379,22 +466,6 @@ namespace RPG_Game
                         break;
                 }
             }
-        }
-
-        public void GetStats()
-        {
-            WriteLine(name + "'s information");
-            WriteLine("level= " + level + ", xp= " + xp + ", gold=" + gold + "\nplayerClass= " + playerClass + ", currentWeapon= " + playerWeapon.ToString() + "\nstats: HP: " + hp + "/" + maxhp + ", STR " + str + ", Magic " + mag + ", Max MP " + mp + "/" + maxmp + "\n");
-        }
-
-        public int GetX()
-        {
-            return X;
-        }
-
-        public int GetY()
-        {
-            return Y;
         }
 
         public void changeHP(int damage)
@@ -465,7 +536,51 @@ namespace RPG_Game
                 Clear();
                 WriteLine("Your health is max. You cannot stay at the inn.\n");
             }
-            
+
+        }
+
+        public void GetStats()
+        {
+            WriteLine(name + "'s information");
+            WriteLine("level= " + level + ", xp= " + xp + ", gold=" + gold + "\nplayerClass= " + playerClass + ", currentWeapon= " + playerWeapon.ToString() + "\nstats: HP: " + hp + "/" + maxhp + ", STR " + str + ", Magic " + mag + ", Max MP " + mp + "/" + maxmp);
+            Write("magicMoves= ");
+            while (true)
+            {
+                if (moves[0] != null)
+                {
+                    foreach (MagicMoves element in moves)
+                    {
+                        if (element != null)
+                        {
+                            Write(element.getName() + " ");
+                        }
+                    }
+                    WriteLine("\n");
+                    break;
+                }
+                else
+                    WriteLine("N/A\n");
+                break;  
+            }
+        }
+
+        public int GetX()
+        {
+            return X;
+        }
+
+        public int GetY()
+        {
+            return Y;
+        }
+
+        public void regenMP()
+        {
+            mp += (int)maxmp / 8;
+
+
+            if (mp > maxmp)
+                mp = maxmp;
         }
 
         public string GetPlayerData()
