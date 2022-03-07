@@ -186,7 +186,7 @@ namespace RPG_Game
                 if (random >= 0 && random <= 50)
                 {
                     Bite bite = new Bite("Bite", 20, 1.2);
-                    WriteLine("Rat used move " + bite.getName() + "!");
+                    WriteLine("Alligator used move " + bite.getName() + "!");
                     player.changeHP(attack(bite));
                     Thread.Sleep(1000);
                 }
@@ -216,7 +216,7 @@ namespace RPG_Game
         public override void waiting()
         {
             Clear();
-            WriteLine("The wild rat is waiting... it has " + hp + "/" + maxhp + " HP remaining...\n");
+            WriteLine("The wild alligator is waiting... it has " + hp + "/" + maxhp + " HP remaining...\n");
         }
 
         public override int attack(MoveHandler bite)
@@ -229,7 +229,7 @@ namespace RPG_Game
             if (defending != 1)
             {
                 defending = 1;
-                WriteLine("The rat is now defending.. (takes 1/2 damage from attacks)");
+                WriteLine("The alligator is now defending.. (takes 1/2 damage from attacks)");
                 Thread.Sleep(1000);
             }
         }
@@ -256,13 +256,13 @@ namespace RPG_Game
             int random = ran.Next(0, 100);
             if (random <= 25)
             {
-                WriteLine("The rat escaped!");
+                WriteLine("The alligator escaped!");
                 escape = true;
                 Thread.Sleep(1000);
             }
             else
             {
-                WriteLine("The rat attempted to run but you kept up!");
+                WriteLine("The alligator attempted to run but you kept up!");
                 Thread.Sleep(1000);
             }
         }
