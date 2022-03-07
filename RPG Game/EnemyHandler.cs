@@ -73,7 +73,7 @@ namespace RPG_Game
                 int random = ran.Next(0, 100);
                 if (random >= 0 && random <= 50)
                 {
-                    Bite bite = new Bite();
+                    Bite bite = new Bite("Bite", 8, 1.2);
                     WriteLine("Rat used move " + bite.getName() + "!");
                     player.changeHP(attack(bite));
                     Thread.Sleep(1000);
@@ -101,6 +101,118 @@ namespace RPG_Game
             }
         }
             
+        public override void waiting()
+        {
+            Clear();
+            WriteLine("The wild rat is waiting... it has " + hp + "/" + maxhp + " HP remaining...\n");
+        }
+
+        public override int attack(MoveHandler bite)
+        {
+            return bite.getDamage();
+        }
+
+        public override void defend()
+        {
+            if (defending != 1)
+            {
+                defending = 1;
+                WriteLine("The rat is now defending.. (takes 1/2 damage from attacks)");
+                Thread.Sleep(1000);
+            }
+        }
+
+        public override void subtractHP(int damageTaken)
+        {
+            if (defending == 1)
+            {
+                hp -= (damageTaken / 2);
+                defending = 0;
+            }
+            else
+                hp -= damageTaken;
+
+            if (hp < 0)
+            {
+                hp = 0;
+                Dead = true;
+            }
+        }
+
+        public override void run()
+        {
+            int random = ran.Next(0, 100);
+            if (random <= 25)
+            {
+                WriteLine("The rat escaped!");
+                escape = true;
+                Thread.Sleep(1000);
+            }
+            else
+            {
+                WriteLine("The rat attempted to run but you kept up!");
+                Thread.Sleep(1000);
+            }
+        }
+
+        public override void isDead()
+        {
+            Dead = true;
+        }
+
+        public override int getxp()
+        {
+            return xp;
+        }
+
+        public override int getgold()
+        {
+            return gold;
+        }
+    }
+
+    public class Alligator : EnemyHandler
+    {
+        public Alligator() : base("Alligator", 150, 20, 150, 20, 20, 12, 80, 20)
+        {
+
+        }
+
+        public override void chooseMove(Player player)
+        {
+            if (hp != 0)
+            {
+                int random = ran.Next(0, 100);
+                if (random >= 0 && random <= 50)
+                {
+                    Bite bite = new Bite("Bite", 20, 1.2);
+                    WriteLine("Rat used move " + bite.getName() + "!");
+                    player.changeHP(attack(bite));
+                    Thread.Sleep(1000);
+                }
+                else if (random > 50 && random <= 75)
+                {
+                    if (defending == 0)
+                    {
+                        defend();
+                    }
+                    else if (defending == 1)
+                    {
+                        WriteLine(enemyName + " is still defending...");
+                        Thread.Sleep(1000);
+                    }
+                }
+                else if (random > 75 && random <= 100)
+                {
+                    run();
+                }
+            }
+            else if (hp == 0)
+            {
+                isDead();
+            }
+        }
+
         public override void waiting()
         {
             Clear();

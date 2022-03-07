@@ -58,8 +58,8 @@ namespace RPG_Game
 
                 if (randomPlace <= 10)
                 {
-                    /*Alligator alligator = new Alligator();*//*
-                    enemies[x, y] = alligator;*/
+                    Alligator alligator = new Alligator();
+                    enemies[x, y] = alligator;
                 }
                 else if (randomPlace > 10 && randomPlace <= 25)
                 {
@@ -86,15 +86,15 @@ namespace RPG_Game
             else
                 switch (enemies[x, y])
                 {
-/*                    case Alligator alligator:
+                    case Alligator alligator:
                         return "Alligator (HARD)";
-                        break;*/
-/*                    case 2:
-                        return "Skeleton Mage (Medium)";
-                        break;*/
-/*                    case 3:
-                        return "Skeleton (Normal)";
-                        break;*/
+                        break;
+                    /*                    case 2:
+                                            return "Skeleton Mage (Medium)";
+                                            break;*/
+                    /*                    case 3:
+                                            return "Skeleton (Normal)";
+                                            break;*/
                     case Rat rat:
                         return "Rat (Easy)";
                         break;
